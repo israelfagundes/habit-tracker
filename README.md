@@ -78,7 +78,8 @@
 ### :suspect: **API**
 
 1. Inside `server` folder, rename `.env.sample` file to `.env`
-2. On the project's root folder, run `make up_server` to start server on `https://localhost:3333`
+2. On the project's root folder, run `make seed` to populate database with some initial data, if desired.
+3. On the project's root folder, run `make up_server` to start server on `https://localhost:3333`
 
 ### :suspect: **Web Client**
 
