@@ -1,7 +1,5 @@
-import { Alert, ScrollView, Text, View } from "react-native";
-import { useEffect, useMemo, useState } from "react";
-import { useRoute } from "@react-navigation/native";
-import dayjs from "dayjs";
+import { ScrollView, Text, View } from "react-native";
+import clsx from "clsx";
 
 import { BackButton } from "../components/BackButton";
 import { ProgressBar } from "../components/ProgressBar";
@@ -9,78 +7,28 @@ import { Checkbox } from "../components/Checkbox";
 import { Loading } from "../components/Loading";
 import { EmptyHabits } from "../components/EmptyHabits";
 
-import { api } from "../lib/axios";
-import { generateProgressPercentage } from "../utils/generate-progress-percentage";
-import clsx from "clsx";
+import { useHabit } from "../hooks/useHabit";
 
-interface Params {
-  date: string;
-}
-
-interface Habits {
-  habits: {
-    id: string;
-    title: string;
-  }[];
-  completedHabits: string[]
-}
-
-export function Habit({}) {
-  const route = useRoute();
-  const { date } = route.params as Params;
-
-  const [isLoading, setIsLoading] = useState(true)
-  const [habits, setHabits] = useState<Habits>()
-
-  const progress = useMemo(() => (
-    habits?.habits.length ? generateProgressPercentage(habits?.habits.length, habits?.completedHabits.length) : 0
-  ), [habits])
-
-  const parsedDate = dayjs(date)
-  const dayOfWeek = parsedDate.format('dddd')
-  const dayAndMonth = parsedDate.format('DD/MM')
-  const isDateInPast = parsedDate.endOf('day').isBefore(new Date())
-  
-  useEffect(() => {
-    setIsLoading(true)
-    api.get('/day', { params : { date }})
-      .then((response) => setHabits(response.data))
-      .catch((err) => {
-        console.error(err)
-        Alert.alert('Ops', 'Não foi possível carregar as informações dos hábitos')
-      })
-      .finally(() => setIsLoading(false))
-  }, [])
+export function Habit() {
+  const { 
+    isLoading, 
+    dayOfWeek, 
+    dayAndMonth, 
+    progress, 
+    isDateInPast, 
+    habits, 
+    handleToggleHabit 
+  } = useHabit()
   
   if (isLoading) {
     return <Loading />
-  }
-
-  const handleToggleHabit = async (habitId: string) => {
-    try {
-      await api.patch(`/habits/${habitId}/toggle`)
-    } catch(err) {
-      console.error(err)
-      Alert.alert('Ops', 'Não foi possível atualizar o status do hábito')
-    }
-
-
-    let completedHabits: string[] = [];
-    
-    if (habits!.completedHabits.includes(habitId)) {
-      completedHabits = habits!.completedHabits.filter(id => id !== habitId)
-    } else {
-      completedHabits = [...habits!.completedHabits, habitId]
-    }
-
-    setHabits((prev) => ({ ...prev, completedHabits }) as Habits)
   }
   
   return (
     <View className="flex-1 bg-background px-8 pt-16">
       <BackButton/>
 
-      <Text className="mt-6 text-zinc-400 font-semibold text-base lowecase">
+      <Text className="mt-6 text-zinc-400 font-semibold text-base lowercase">
         {dayOfWeek}
       </Text>
 
