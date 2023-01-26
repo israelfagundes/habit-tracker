@@ -1,10 +1,9 @@
-import { useState, useCallback } from "react";
 import { View, Text, ScrollView, Alert } from "react-native";
-import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import dayjs from "dayjs";
 
 import { generateRangeDatesFromYearStart } from "../utils/generate-range-between-dates";
-import { api } from "../lib/axios";
+
+import { useHome } from "../hooks/useHome";
 
 import { Header } from "../components/Header";
 import { DAY_SIZE, HabitDay } from "../components/HabitDay";
@@ -15,39 +14,8 @@ const datesFromYearStart = generateRangeDatesFromYearStart()
 const minimumSummaryDatesSize = 18 * 5;
 const daysToFill = minimumSummaryDatesSize - datesFromYearStart.length
 
-interface HabitDay {
-  id: string;
-  date: string;
-  completed: number;
-  habits: number;
-}
-
 export function Home() {
-  const { navigate } = useNavigation()
-
-  const [loading, setLoading] = useState(true)
-  const [summary, setSummary] = useState<HabitDay[]>([])
-
-  function handleNavigateToHabit(date: string) {
-    navigate('habit', { date })
-  }
-  
-  useFocusEffect(useCallback(() => {
-    (async () => {
-      try {
-        setLoading(true)
-
-        const response = await api.get('/summary')
-
-        setSummary(response.data)
-      } catch (err) {
-        Alert.alert('Ops', 'Não foi possível carregar os hábitos.')
-        console.error(err)
-      } finally {
-        setLoading(false)
-      }
-    })()
-  }, []))
+  const { loading, summary, handleNavigateToHabit } = useHome()
   
   if (loading) return <Loading />
   
