@@ -1,18 +1,19 @@
-import { View, Text, ScrollView, Alert } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import dayjs from "dayjs";
 
-import { generateRangeDatesFromYearStart } from "../utils/generate-range-between-dates";
+import {
+  WEEK_DAYS,
+  DATES_FROM_YEAR_START,
+  DAYS_TO_FILL,
+  DAY_SIZE
+} from '../utils/constants'
 
 import { useHome } from "../hooks/useHome";
 
 import { Header } from "../components/Header";
-import { DAY_SIZE, HabitDay } from "../components/HabitDay";
+import { HabitDay } from "../components/HabitDay";
 import { Loading } from "../components/Loading";
 
-const weekDays = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S']
-const datesFromYearStart = generateRangeDatesFromYearStart()
-const minimumSummaryDatesSize = 18 * 5;
-const daysToFill = minimumSummaryDatesSize - datesFromYearStart.length
 
 export function Home() {
   const { loading, summary, handleNavigateToHabit } = useHome()
@@ -24,7 +25,7 @@ export function Home() {
       <Header />
 
       <View className="flex-row mt-6 mb-2">
-        {weekDays.map((weekDay, index) => (
+        {WEEK_DAYS.map((weekDay, index) => (
           <Text
             key={index} 
             className='text-zinc-400 text-xl font-bold text-center mx-1'
@@ -40,7 +41,7 @@ export function Home() {
         contentContainerStyle={{ paddingBottom: 100 }}
       >
         <View className="flex-row flex-wrap">
-          {datesFromYearStart.map(date => {
+          {DATES_FROM_YEAR_START.map(date => {
             const dayInSummary = summary.find(day => dayjs(date).isSame(day.date, 'day')
             )
             
@@ -55,7 +56,7 @@ export function Home() {
             )
           })}
 
-          {!!daysToFill && Array.from({ length: daysToFill }).map((_, index) => (
+          {!!DAYS_TO_FILL && Array.from({ length: DAYS_TO_FILL }).map((_, index) => (
             <HabitDay disabled key={index} />
           ))}
         </View>
