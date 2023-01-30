@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react"
-
-import { generateDatesFromYearBeginning } from "../../utils/generate-dates-from-year-beginning"
-import HabitDay from "../HabitDay"
-
-import { api } from "../../lib/axios"
 import dayjs from "dayjs"
+import { generateDatesFromYearBeginning } from "../../utils/generate-dates-from-year-beginning"
+
+import { useSummary } from "../../hooks/useSummary"
+
+import HabitDay from "../HabitDay"
 
 const weekDays = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S']
 
@@ -13,27 +12,8 @@ const summaryDates = generateDatesFromYearBeginning()
 const minimumSummaryDatesSize = 18 * 7 // 18 weeks
 const amountOfDaysToFill = minimumSummaryDatesSize - summaryDates.length
 
-interface HabitDay {
-  id: string;
-  date: string;
-  habits: number;
-  completed: number;
-}
-
 export default function SummaryTable() {
-  const [summary, setSummary] = useState<HabitDay[]>([])
-  
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await api.get('/summary')
-
-        setSummary(response.data)
-      } catch(e) {
-        console.error(e)
-      }
-    })()
-  }, [])
+  const { summary } = useSummary()
   
   return (
     <div className="w-full flex">

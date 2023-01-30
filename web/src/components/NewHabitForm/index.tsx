@@ -1,7 +1,6 @@
-import { ChangeEvent, FormEvent, useState } from "react";
 import { Check } from "phosphor-react";
 import { Checkbox } from "../Checkbox";
-import { api } from "../../lib/axios";
+import { useNewHabitForm } from "./useNewHabitForm";
 
 const availableWeekDays = [
   'Domingo',
@@ -14,34 +13,13 @@ const availableWeekDays = [
 ]
 
 export default function NewHabitForm() {
-  const [title, setTitle] = useState('')
-  const [weekDays, setWeekDays] = useState<number[]>([])
-  
-  function handleTitleChange(e: ChangeEvent<HTMLInputElement>) {
-    setTitle(e.target.value)
-  }
-
-  function handleToggleWeekDay(weekDay: number) {
-    if (weekDays.includes(weekDay)) {
-      setWeekDays(prev => prev.filter((day) => day !== weekDay))
-    } else {
-      setWeekDays(prev => ([...prev, weekDay]))
-    }
-  }
-  
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault()
-
-    if (!title || !weekDays.length) return
-
-    await api.post('/habits', {
-      title,
-      weekDays
-    })
-
-    setTitle('')
-    setWeekDays('')
-  }
+  const {
+    handleTitleChange,
+    handleToggleWeekDay,
+    handleSubmit,
+    title,
+    weekDays
+  } = useNewHabitForm()
   
   return (
     <form onSubmit={handleSubmit} className="w-full flex flex-col mt-6">

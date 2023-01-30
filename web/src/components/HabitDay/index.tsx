@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 
 import { ProgressBar } from '../ProgressBar';
 import { HabitsList } from '../HabitsList';
+import { useHabits } from '../../hooks/useHabits';
 
 interface HabitDayProps {
   defaultCompleted?: number;
@@ -14,16 +15,7 @@ interface HabitDayProps {
 }
 
 export default function HabitDay({ defaultCompleted = 0, habits = 0, disabled, date }: HabitDayProps) {
-  const [completed, setCompleted] = useState(defaultCompleted)
-  
-  const completedPercentage = habits > 0 ? Math.round((completed / habits) * 100) : 0;
-
-  const dayAndMonth = date && dayjs(date).format('DD/MM')
-  const dayOfWeek = date && dayjs(date).format('dddd')
-  
-  function handleCompletedChange(completed: number) {
-    setCompleted(completed)
-  }
+  const { completedPercentage, dayAndMonth, dayOfWeek, habits: dayHabits, handleToggleHabit, isDateInPast } = useHabits({ date, defaultCompleted, defaultHabits: habits })
 
   return (
     <Popover.Root>
@@ -41,13 +33,16 @@ export default function HabitDay({ defaultCompleted = 0, habits = 0, disabled, d
         })}
       />
       <Popover.Portal>
-        <Popover.Content className='min-w-[320px] p-6 rounded-2xl bg-zinc-900 flex flex-col focus:outline-none focus:ring-2 focus:ring-violet-700 focus:ring-offset-2 focus:ring-offset-background'>
+        <Popover.Content
+          className='min-w-[320px] p-6 rounded-2xl bg-zinc-900 flex flex-col focus:outline-none focus:ring-2 focus:ring-violet-700 focus:ring-offset-2 focus:ring-offset-background'
+          collisionBoundary={document.getElementById('root')}
+        >
           <span className='font-semibold text-zinc-400 capitalize'>{dayOfWeek}</span>
           <span className='mt-1 font-extrabold leading-tight text-3xl'>{dayAndMonth}</span>
 
           <ProgressBar progress={completedPercentage} />
 
-          <HabitsList date={date as Date} onCompletedChange={handleCompletedChange} />
+          <HabitsList habitsList={dayHabits} onToggleHabit={handleToggleHabit} isDateInPast={isDateInPast} />
           <Popover.Arrow height={8} width={16} className='fill-zinc-900' />
         </Popover.Content>
       </Popover.Portal>
