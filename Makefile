@@ -23,7 +23,7 @@ generate_chart:
 
 # Web
 up_web:
-	cd web && npm run dev
+	cd web && npm run dev --host
 
 # Mobile
 up_mobile:
