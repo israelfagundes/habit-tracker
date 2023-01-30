@@ -1,8 +1,8 @@
-import { useContext } from "react";
+import { useContext } from 'react';
 
-import { SummaryContext } from "../contexts/SummaryContext";
+import { SummaryContext } from '../contexts/SummaryContext';
 
 export function useSummary() {
-  const context = useContext(SummaryContext)
-  return context
+  const context = useContext(SummaryContext);
+  return context;
 }

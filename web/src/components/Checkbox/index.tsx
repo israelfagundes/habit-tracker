@@ -1,6 +1,6 @@
-import * as RadixCheckbox from '@radix-ui/react-checkbox'
-import { Check } from 'phosphor-react'
-import clsx from 'clsx'
+import * as RadixCheckbox from '@radix-ui/react-checkbox';
+import { Check } from 'phosphor-react';
+import clsx from 'clsx';
 
 interface Props extends RadixCheckbox.CheckboxProps {
   children?: React.ReactNode;
@@ -11,11 +11,12 @@ interface Props extends RadixCheckbox.CheckboxProps {
 export function Checkbox({ children, light = false, ringOffsetColor = 'background', ...rest }: Props) {
   return (
     <RadixCheckbox.Root
-      className='flex items-center gap-3 group focus:outline-none disabled:cursor-not-allowed'
+      className="flex items-center gap-3 group focus:outline-none disabled:cursor-not-allowed"
       {...rest}
     >
-      <div 
-        className={clsx(`
+      <div
+        className={clsx(
+          `
           h-8
           w-8
           rounded-lg
@@ -32,21 +33,25 @@ export function Checkbox({ children, light = false, ringOffsetColor = 'backgroun
           group-focus:ring-2
           group-focus:ring-violet-700
           group-focus:ring-offset-2
-        `, {
-          [`group-focus:ring-offset-${ringOffsetColor}`]: !!ringOffsetColor,
-        })}
+        `,
+          {
+            [`group-focus:ring-offset-${ringOffsetColor}`]: !!ringOffsetColor,
+          },
+        )}
       >
         <RadixCheckbox.Indicator>
-          <Check size={20} className='text-white' weight='bold' />
+          <Check size={20} className="text-white" weight="bold" />
         </RadixCheckbox.Indicator>
       </div>
 
-      <span className={clsx('text-white leading-tight', {
-        'font-semibold text-xl group-data-[state=checked]:line-through group-data-[state=checked]:text-zinc-400': !light,
-
-      })}>
+      <span
+        className={clsx('text-white leading-tight', {
+          'font-semibold text-xl group-data-[state=checked]:line-through group-data-[state=checked]:text-zinc-400':
+            !light,
+        })}
+      >
         {children}
       </span>
     </RadixCheckbox.Root>
-  )
+  );
 }

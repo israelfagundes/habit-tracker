@@ -1,6 +1,6 @@
-import { Check } from "phosphor-react";
-import { Checkbox } from "../Checkbox";
-import { useNewHabitForm } from "./useNewHabitForm";
+import { Check } from 'phosphor-react';
+import { Checkbox } from '../Checkbox';
+import { useNewHabitForm } from './useNewHabitForm';
 
 const availableWeekDays = [
   'Domingo',
@@ -9,35 +9,29 @@ const availableWeekDays = [
   'Quarta-feira',
   'Quinta-feira',
   'Sexta-feira',
-  'Sábado'
-]
+  'Sábado',
+];
 
 export default function NewHabitForm() {
-  const {
-    handleTitleChange,
-    handleToggleWeekDay,
-    handleSubmit,
-    title,
-    weekDays
-  } = useNewHabitForm()
-  
+  const { handleTitleChange, handleToggleWeekDay, handleSubmit, title, weekDays } = useNewHabitForm();
+
   return (
     <form onSubmit={handleSubmit} className="w-full flex flex-col mt-6">
       <label className="font-semibold leading-tight" htmlFor="title">
         Qual seu comprometimento?
       </label>
 
-      <input 
-        type="text" 
-        id="title" 
-        placeholder="ex.: Exercícios, dormir bem, etc..." 
-        autoFocus 
+      <input
+        type="text"
+        id="title"
+        placeholder="ex.: Exercícios, dormir bem, etc..."
+        autoFocus
         className="p-4 rounded-lg mt-3 bg-zinc-800 text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-violet-700 focus:ring-offset-2 focus:ring-offset-zinc-900"
         value={title}
         onChange={handleTitleChange}
       />
 
-      <label className="font-semibold leading-tight mt-4" htmlFor="">
+      <label className="font-semibold leading-tight mt-4" htmlFor="title">
         Qual a recorrência?
       </label>
 
@@ -48,7 +42,7 @@ export default function NewHabitForm() {
             light
             onCheckedChange={() => handleToggleWeekDay(index)}
             checked={weekDays.includes(index)}
-            ringOffsetColor='zinc-900'
+            ringOffsetColor="zinc-900"
           >
             {weekDay}
           </Checkbox>
@@ -75,9 +69,9 @@ export default function NewHabitForm() {
           focus:ring-offset-zinc-900
         `}
       >
-        <Check size={20} weight='bold' />
+        <Check size={20} weight="bold" />
         Confirmar
       </button>
     </form>
-  )
+  );
 }
